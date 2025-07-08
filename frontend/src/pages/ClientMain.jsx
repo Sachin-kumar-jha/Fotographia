@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import Header from '../components/Header';
+import { useNavigate } from 'react-router-dom';
+import Footer from '../components/Footer';
 
 const ClientMain = () => {
   // Timer state - starts at 30 minutes (1800 seconds)
@@ -183,7 +185,7 @@ const ClientMain = () => {
   );
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-purple-50 via-white to-orange-50">
+    <div className="min-h-screen bg-gradient-to-br from-purple-50 via-white to-orange-50 flex flex-col">
       <Header 
         showTimer={true}
         userName="DESHANT MEMARA"
@@ -237,6 +239,8 @@ const ClientMain = () => {
           </svg>
         </button>
       </div>
+
+      <Footer />
     </div>
   );
 };
