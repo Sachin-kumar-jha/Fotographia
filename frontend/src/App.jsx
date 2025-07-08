@@ -1,4 +1,3 @@
-
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import Dashboard from "./pages/Dashboard";
 
@@ -8,13 +7,14 @@ import Circular from "./components/Spinner/Circular";
 import  { lazy, Suspense } from 'react';
 import AddAccessForm from "./pages/AddAccesForm";
 const ClientMain = lazy(() => import('./pages/ClientMain'));
+import Wishlist from "./pages/Wishlist";
 import ProtectedForAdmin from "./pages/Route/ProtectedForAdmin";
 import { useDispatch} from 'react-redux';
 import { setUser } from "./store/slice/authSlice";
 import { useEffect } from "react";
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-//import FileUpload from "./pages/FileUploadDemo";
+import FileUpload from "./pages/FileUploadDemo";
 function App() {
   const dispatch=useDispatch();
   useEffect(() => {
@@ -30,30 +30,31 @@ function App() {
         <Route path="/login" element={<Login />} />
 
         
-        {/* <Route path="/add-project" element={<AddProject />} /> */}
+        <Route path="/add-project" element={<AddProject />} />
         
         <Route element={<ProtectedForAdmin />}>
-        {/* <Route path="/dashboard" element={<Dashboard />} /> */}
+        <Route path="/dashboard" element={<Dashboard />} />
         <Route path="/dashboard/pending" element={<Dashboard />} />
         <Route path="/dashboard/current" element={<Dashboard />} />
         <Route path="/dashboard/completed" element={<Dashboard />} />
         <Route path="/dashboard/:section" element={<Dashboard />} />
           <Route
-            path="/dashboard"
+            path="/client"
             element={
               <Suspense fallback={<Circular/>}>
                 <ClientMain />
               </Suspense>
             }
           />
+          <Route path="/wishlist" element={<Wishlist />} />
           </Route>
-        {/* <Route path="/invite" element={<InviteDemo />} /> */}
+        <Route path="/invite" element={<InviteDemo />} />
         
 
   
-        {/* <Route path="/face-match" element={<FaceMatch />} /> */}
+        <Route path="/face-match" element={<FaceMatch />} />
     
-        {/* Lazy loaded + protected route */}
+        Lazy loaded + protected route
         <Route element={<ProtectedRoute />}>
         <Route path="/client" element={<ClientMain />} />
           <Route
