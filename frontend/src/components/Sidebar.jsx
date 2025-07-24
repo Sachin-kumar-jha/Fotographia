@@ -21,8 +21,8 @@ const Sidebar = ({ className = '' }) => {
   };
 
   return (
-    <aside className={`w-full lg:w-[220px] bg-[#222] text-white flex flex-col lg:pt-6 lg:pb-6 lg:pl-0 lg:pr-0 lg:min-h-screen p-3 lg:p-0 ${className}`}>
-      <div className="flex items-center gap-3 font-['Pacifico'] text-lg lg:text-[1.3rem] px-3 lg:px-6 pb-4 lg:pb-8">
+    <aside className={`w-full lg:w-[220px] bg-white text-black flex flex-col lg:pt-6 lg:pb-6 lg:pl-0 lg:pr-0 lg:min-h-screen p-3 lg:p-0 border-r border-gray-200 ${className}`}>
+      <div className="flex items-center gap-3 font-['Pacifico'] text-lg lg:text-[1.3rem] px-3 lg:px-6 pb-4 lg:pb-8 text-black">
         <Logo size="lg" />
       </div>
       
@@ -31,10 +31,10 @@ const Sidebar = ({ className = '' }) => {
           <a 
             key={index}
             href="#"
-            className={`text-white no-underline py-2 lg:py-3 px-3 lg:px-[18px] rounded-lg text-sm lg:text-[1.08rem] flex items-center gap-2 lg:gap-[10px] transition-all duration-200 ${
+            className={`no-underline py-2 lg:py-3 px-3 lg:px-[18px] rounded-lg text-sm lg:text-[1.08rem] flex items-center gap-2 lg:gap-[10px] transition-all duration-200 ${
               isActive(item.path) 
-                ? 'bg-white text-[#181818]' 
-                : 'hover:bg-white hover:text-[#181818]'
+                ? 'bg-black text-white font-medium' 
+                : 'text-black hover:bg-gray-100'
             } whitespace-nowrap`}
             onClick={(e) => {
               e.preventDefault();

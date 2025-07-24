@@ -3,34 +3,26 @@ import { useNavigate, useLocation } from 'react-router-dom';
 import Sidebar from '../components/Sidebar';
 import ProjectTable from '../components/ProjectTable';
 
-// Add scrollbar hide styles
-const scrollbarHideStyle = `
-  .scrollbar-hide {
-    -ms-overflow-style: none;
-    scrollbar-width: none;
-  }
-  .scrollbar-hide::-webkit-scrollbar {
-    display: none;
-  }
-`;
-
-// Inject styles
-if (typeof document !== 'undefined') {
-  const style = document.createElement('style');
-  style.textContent = scrollbarHideStyle;
-  document.head.appendChild(style);
-}
-
-// Stats will be calculated dynamically in the component
-
-const initialPendingProjects = [];
-const initialCurrentProjects = [
-  { name: 'Amrita-Deepak', pkg: 'Gold', date: '22 May 2024', mobile: '9426585858' },
-  { name: 'Amrita-Deepak', pkg: 'Silver', date: '22 May 2024', mobile: '9426585858' },
-  { name: 'Amrita-Deepak', pkg: 'Platinum', date: '22 May 2024', mobile: '9426585858' },
-  { name: 'Amrita-Deepak', pkg: 'Gold', date: '22 May 2024', mobile: '9426585858' },
+const initialPendingProjects = [
+  { name: 'Amrita-Deepak', pkg: 'Gold', date: '22 May 2024', mobile: '9426588568' },
+  { name: 'Amrita-Deepak', pkg: 'Silver', date: '22 May 2024', mobile: '9426588568' },
+  { name: 'Amrita-Deepak', pkg: 'Platinum', date: '22 May 2024', mobile: '9426588568' },
+  { name: 'Amrita-Deepak', pkg: 'Gold', date: '22 May 2024', mobile: '9426588568' },
 ];
-const initialCompletedProjects = initialCurrentProjects;
+
+const initialCurrentProjects = [
+  { name: 'Amrita-Deepak', pkg: 'Gold', date: '22 May 2024', mobile: '9426588568' },
+  { name: 'Amrita-Deepak', pkg: 'Silver', date: '22 May 2024', mobile: '9426588568' },
+  { name: 'Amrita-Deepak', pkg: 'Platinum', date: '22 May 2024', mobile: '9426588568' },
+  { name: 'Amrita-Deepak', pkg: 'Gold', date: '22 May 2024', mobile: '9426588568' },
+];
+
+const initialCompletedProjects = [
+  { name: 'Amrita-Deepak', pkg: 'Gold', date: '22 May 2024', mobile: '9426588568' },
+  { name: 'Amrita-Deepak', pkg: 'Silver', date: '22 May 2024', mobile: '9426588568' },
+  { name: 'Amrita-Deepak', pkg: 'Platinum', date: '22 May 2024', mobile: '9426588568' },
+  { name: 'Amrita-Deepak', pkg: 'Gold', date: '22 May 2024', mobile: '9426588568' },
+];
 
 const Dashboard = () => {
   const navigate = useNavigate();
@@ -54,7 +46,6 @@ const Dashboard = () => {
     localStorage.setItem('pendingProjects', JSON.stringify(pendingProjects));
   }, [pendingProjects]);
 
-  // Update section based on URL path
   useEffect(() => {
     const path = location.pathname;
     if (path === '/dashboard') {
@@ -67,11 +58,6 @@ const Dashboard = () => {
       setCurrentSection('completed');
     }
   }, [location.pathname]);
-
-  const handleNav = (sec) => {
-    setCurrentSection(sec);
-    navigate(sec === 'dashboard' ? '/dashboard' : `/dashboard/${sec}`);
-  };
 
   const handleDelete = (type, index) => {
     switch (type) {
@@ -89,15 +75,13 @@ const Dashboard = () => {
     }
   };
 
-  // Calculate dynamic stats
   const stats = [
-    { label: 'Total projects', value: pendingProjects.length + currentProjects.length + completedProjects.length },
-    { label: 'Pending projects', value: pendingProjects.length },
-    { label: 'Current projects', value: currentProjects.length },
-    { label: 'Completed projects', value: completedProjects.length },
+    { number: '120', label: 'Total projects' },
+    { number: '64', label: 'Pending projects' },
+    { number: '32', label: 'Current projects' },
+    { number: '24', label: 'Completed projects' },
   ];
 
-  // Filter projects based on search query
   const filterProjects = (projects) => {
     if (!searchQuery) return projects;
     return projects.filter(project => 
@@ -107,103 +91,97 @@ const Dashboard = () => {
     );
   };
 
-  const renderContent = () => {
-    switch (currentSection) {
-      case 'pending':
-        return (
-          <>
-            <h2 className="text-xl lg:text-[2rem] mb-4 lg:mb-6 font-['Montserrat']">Pending Projects</h2>
-            <ProjectTable 
-              title="Pending" 
-              projects={filterProjects(pendingProjects)}
-              onDelete={(index) => handleDelete('pending', index)}
-            />
-          </>
-        );
-      case 'current':
-        return (
-          <>
-            <h2 className="text-xl lg:text-[2rem] mb-4 lg:mb-6 font-['Montserrat']">Current Projects</h2>
-            <ProjectTable 
-              title="Current" 
-              projects={filterProjects(currentProjects)}
-              onDelete={(index) => handleDelete('current', index)}
-            />
-          </>
-        );
-      case 'completed':
-        return (
-          <>
-            <h2 className="text-xl lg:text-[2rem] mb-4 lg:mb-6 font-['Montserrat']">Completed Projects</h2>
-            <ProjectTable 
-              title="Completed" 
-              projects={filterProjects(completedProjects)}
-              onDelete={(index) => handleDelete('completed', index)}
-            />
-          </>
-        );
-      default:
-        return (
-          <>
-            <h2 className="text-xl lg:text-[2rem] mb-4 lg:mb-6 font-['Montserrat']">Dashboard</h2>
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:flex lg:gap-6 gap-3 lg:gap-6 mb-6 lg:mb-8">
-              {stats.map((s, i) => (
-                <div key={i} className="bg-[#181818] text-white rounded-xl py-4 lg:py-6 px-4 lg:px-8 lg:min-w-[160px] flex flex-col items-center shadow-[0_2px_8px_rgba(0,0,0,0.10)]">
-                  <div className="text-xl lg:text-[2rem] font-bold">{s.value}</div>
-                  <div className="text-sm lg:text-[1.1rem] mt-1 lg:mt-[6px] text-[#ccc] text-center">{s.label}</div>
-                </div>
-              ))}
-            </div>
-            <ProjectTable 
-              title="Pending" 
-              projects={filterProjects(pendingProjects.slice(0, 4))} 
-              onDelete={(index) => handleDelete('pending', index)}
-            />
-            <ProjectTable 
-              title="Current" 
-              projects={filterProjects(currentProjects)}
-              onDelete={(index) => handleDelete('current', index)}
-            />
-            <ProjectTable 
-              title="Completed" 
-              projects={filterProjects(completedProjects)}
-              onDelete={(index) => handleDelete('completed', index)}
-            />
-          </>
-        );
-    }
-  };
+  const StatCard = ({ number, label }) => (
+    <div className="bg-white rounded-[20px] p-4 md:p-6 shadow-sm">
+      <div className="flex items-center gap-3 mb-2">
+        <div className="bg-black/5 p-2 rounded">
+          <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z" />
+          </svg>
+        </div>
+        <span className="text-3xl md:text-4xl font-bold">{number}</span>
+      </div>
+      <p className="text-gray-500 text-sm md:text-base">{label}</p>
+    </div>
+  );
 
   return (
-    <div className="flex min-h-screen bg-[#f4f4f4] lg:flex-row flex-col">
-      <Sidebar currentSection={currentSection} setCurrentSection={setCurrentSection} />
-      <main className="flex-1 p-4 lg:pt-8 lg:pr-8 lg:pb-8 lg:pl-0 flex flex-col">
-        <header className="flex flex-col sm:flex-row justify-between items-center bg-white py-4 lg:py-[18px] px-4 lg:px-8 rounded-xl lg:rounded-t-xl shadow-[0_2px_8px_rgba(0,0,0,0.06)] mb-4 lg:mb-[18px] gap-4 sm:gap-0">
-          <div className="flex-1 w-full sm:w-auto">
-            <input 
-              type="text" 
-              placeholder="Search ..." 
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
-              className="py-[10px] px-[18px] rounded-lg border-[1.5px] border-[#ccc] text-base w-full sm:w-[220px]"
-            />
+    <div className="min-h-screen bg-black">
+      {/* Mobile Top Sidebar */}
+      <div className="lg:hidden">
+        <Sidebar currentSection={currentSection} />
+      </div>
+
+      <div className="flex lg:min-h-screen">
+        {/* Desktop Left Sidebar */}
+        <div className="hidden lg:block">
+          <Sidebar currentSection={currentSection} />
+        </div>
+
+        {/* Main Content */}
+        <main className="flex-1 p-4 md:p-8">
+          {/* Header */}
+          <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 mb-6 md:mb-8">
+            <h1 className="text-2xl md:text-3xl font-bold text-white">Dashboard</h1>
+            <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-4 w-full md:w-auto">
+              <div className="relative flex-1 sm:flex-none">
+                <input 
+                  type="text" 
+                  placeholder="Search ..." 
+                  value={searchQuery}
+                  onChange={(e) => setSearchQuery(e.target.value)}
+                  className="w-full sm:w-[300px] py-2 px-4 pr-10 rounded-lg bg-white/10 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-white/20 border border-white/20"
+                />
+                <svg className="absolute right-3 top-1/2 transform -translate-y-1/2" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2">
+                  <circle cx="11" cy="11" r="8" />
+                  <line x1="21" y1="21" x2="16.65" y2="16.65" />
+                </svg>
+              </div>
+              <div className="flex gap-3">
+                <button 
+                  className="bg-white text-black py-2 px-4 rounded-lg flex items-center gap-2 hover:bg-gray-100 transition-colors font-medium"
+                  onClick={() => navigate('/add-project')}
+                >
+                  <span>+</span>
+                  <span className="hidden sm:inline">Add project</span>
+                </button>
+                <button className="text-white p-2 hover:bg-white/10 rounded-lg transition-colors">
+                  <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                    <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9" />
+                    <path d="M13.73 21a2 2 0 0 1-3.46 0" />
+                  </svg>
+                </button>
+              </div>
+            </div>
           </div>
-          <div className="flex items-center gap-3 lg:gap-[18px] w-full sm:w-auto justify-center sm:justify-end">
-            <button 
-              className="bg-[#181818] text-white border-none rounded-lg py-[10px] px-4 lg:px-[18px] text-sm lg:text-base font-medium cursor-pointer hover:bg-[#444] flex-1 sm:flex-none"
-              type="button" 
-              onClick={() => navigate('/add-project')}
-            >
-              <span className="sm:hidden">+</span>
-              <span className="hidden sm:inline">+ Add project</span>
-            </button>
-            <span className="text-xl lg:text-2xl cursor-pointer">🔔</span>
+
+          {/* Stats Grid - Only show on dashboard section */}
+          {currentSection === 'dashboard' && (
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6 mb-6 md:mb-8">
+              {stats.map((stat, index) => (
+                <StatCard key={index} {...stat} />
+              ))}
+            </div>
+          )}
+
+          {/* Project Tables */}
+          <div className="space-y-6">
+            {currentSection === 'dashboard' ? (
+              <>
+                <ProjectTable title="Pending" projects={filterProjects(pendingProjects)} onDelete={(index) => handleDelete('pending', index)} />
+                <ProjectTable title="Current" projects={filterProjects(currentProjects)} onDelete={(index) => handleDelete('current', index)} />
+                <ProjectTable title="Completed" projects={filterProjects(completedProjects)} onDelete={(index) => handleDelete('completed', index)} />
+              </>
+            ) : currentSection === 'pending' ? (
+              <ProjectTable title="Pending" projects={filterProjects(pendingProjects)} onDelete={(index) => handleDelete('pending', index)} />
+            ) : currentSection === 'current' ? (
+              <ProjectTable title="Current" projects={filterProjects(currentProjects)} onDelete={(index) => handleDelete('current', index)} />
+            ) : (
+              <ProjectTable title="Completed" projects={filterProjects(completedProjects)} onDelete={(index) => handleDelete('completed', index)} />
+            )}
           </div>
-        </header>
-        <section className="bg-white rounded-xl lg:rounded-b-xl p-4 lg:p-8 shadow-[0_2px_16px_rgba(0,0,0,0.08)]">
-          {renderContent()}
-        </section>
-      </main>
+        </main>
+      </div>
     </div>
   );
 };
