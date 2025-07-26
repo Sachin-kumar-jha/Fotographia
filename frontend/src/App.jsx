@@ -22,7 +22,7 @@ function App() {
         {/* <Route path="/omair_dashboard" element={<Dashboard />}></Route> */}
         <Route path="/omair_client" element={<ClientMain />} />
         
-   
+      <Route path="/add-access" element={<AddAccessForm/>}/>
 
         <Route element={<ProtectedForAdmin />}>
           <Route

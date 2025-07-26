@@ -226,7 +226,6 @@ export const addAccess = async (req, res) => {
       return res.status(400).json({ message: "Invalid role. Must be 'viewer' or 'admin'." });
     }
 
-    console.log(userId);
     const user = await ClientUser.findById(userId);
     if (!user) {
       return res.status(404).json({ message: "User not found" });

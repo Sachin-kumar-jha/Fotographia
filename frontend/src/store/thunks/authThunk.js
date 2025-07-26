@@ -7,7 +7,7 @@ export const loginUser = createAsyncThunk(
   async ({pin}, thunkAPI) => {
     try {
       const response = await api.post('/api/v1/user/signin', {pin});
-       console.log(response.data);
+       console.log(response.data?.user);
       return await response?.data;
     } catch (err) {
       const message = err.response?.data?.message || err.message;

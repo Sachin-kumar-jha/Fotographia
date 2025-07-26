@@ -7,10 +7,12 @@ import { loginUser } from '../store/thunks/authThunk';
 const useLogin = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const { user, loading, error } = useSelector((state) => state.auth);
+  const { setUser, loading, error } = useSelector((state) => state.auth);
 
+  
   const handleLogin = async (credentials) => {
     const res = dispatch(loginUser(credentials));
+  console.log(res);
     if (res.success) navigate('/user');
   };
 

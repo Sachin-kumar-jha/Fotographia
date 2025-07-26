@@ -3,7 +3,7 @@ import Logo from './Logo';
 import { useDispatch } from 'react-redux';
 import { logoutUser } from '../store/slice/authSlice';
 import LogoutButton from './LogoutButton';
-
+import Countdown2 from './CountDown';
 const Header = ({ 
   showTimer = false, 
   userName = '', 
@@ -24,20 +24,7 @@ const Header = ({
           {/* Center Navigation - Hide on mobile */}
           {showTimer && (
             <div className="hidden md:flex items-center gap-2">
-              <div className="bg-indigo-900 rounded-full py-1 px-4 flex items-center gap-2">
-                <button className="px-2 md:px-3 py-1 text-white text-xs md:text-sm font-medium">
-                  1<br/>month
-                </button>
-                <button className="px-2 md:px-3 py-1 text-white text-xs md:text-sm font-medium">
-                  19<br/>days
-                </button>
-                <button className="px-2 md:px-3 py-1 text-white text-xs md:text-sm font-medium">
-                  12<br/>hours
-                </button>
-                <button className="px-2 md:px-3 py-1 text-white text-xs md:text-sm font-medium">
-                  55<br/>sec
-                </button>
-              </div>
+                  <Countdown2/>
               <div className="text-xs text-gray-500 text-center">
                 Time Limit
               </div>

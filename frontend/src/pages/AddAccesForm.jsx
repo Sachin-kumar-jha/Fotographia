@@ -2,23 +2,27 @@ import { useDispatch, useSelector } from 'react-redux';
 import { addAccess} from '../store/thunks/addAcess.js';
 import { resetAccessStatus } from '../store/slice/accessSlice.js';
 import { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
+
+import { toast } from 'react-toastify';
 const AddAccessForm = () => {
   const dispatch = useDispatch();
   const { loading, error, success } = useSelector((state) => state.access);
-  const userId = useSelector((state) => state.auth.user?._id);
-console.log(userId);
+
+  const data = JSON.parse(localStorage.getItem("user"));
+  const userId=data?.user?._id;
+  console.log(userId);
+
+
 
   const [email, setEmail] = useState('');
   const [role, setRole] = useState('viewer');
-    const navigate = useNavigate();
+
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
         const res= await dispatch(addAccess({ userId, email, role })).unwrap();
-        console.log("Success",res);
-        navigate("/user");
+        if(res) toast.success(`${res?.message}`);
     } catch (err) {
         console.error('access failed:', err);
     }

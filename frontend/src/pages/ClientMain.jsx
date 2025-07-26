@@ -1,7 +1,7 @@
 import Header from "../components/Header"
-import { useEffect, useState , useMemo } from "react"
+import { useEffect, useState, useMemo } from "react"
 import axios from "axios"
-
+import AddAccessForm from "./AddAccesForm"
 const ClientMain = () => {
 
 
@@ -16,12 +16,12 @@ const ClientMain = () => {
     */
 
     //////////////////////////////////////////////////////////////////
-    const weddingId = "6873f83493cb218de9046999"; // fix this
+    //  const weddingId = "6873f83493cb218de9046999"; // fix this
     ///////////////////////////////////////////////////////////////////
 
 
     // for now keeping this as the response structure will fix this afterwards.
-    
+
     const [categoryDetails, setCategoryDetails] = useState({
         "success": true,
         "data": [
@@ -45,6 +45,9 @@ const ClientMain = () => {
 
     const [unlockedIndexes, setUnlockedIndexes] = useState([0]);
     const [clickedImagesTracker, setClickedImagesTracker] = useState(Array(categoryDetails.data.length).fill(0));
+    const data = JSON.parse(localStorage.getItem("user"));
+
+    const weddingId = data?.user?.weddingId;
 
     useEffect(() => {
         let newUnlocked = [0];
@@ -63,7 +66,7 @@ const ClientMain = () => {
     useEffect(() => {
 
         async function FetchImages() {
-            const response = await axios.post('http://localhost:8000/api/v1/user/fetch_presigned_urls', {
+            const response = await axios.post('http://localhost:8080/api/v1/user/fetch_presigned_urls', {
                 weddingId
             })
             console.log(response.data);
@@ -71,7 +74,7 @@ const ClientMain = () => {
         }
 
         FetchImages();
-    }, [])
+    }, [weddingId]);
 
     // Memoize the callback per index so its reference is stable for each PhotoGridUnlocked
     const handleClickedLengthChangeMap = useMemo(() => {
@@ -111,10 +114,13 @@ const PhotoGridUnlocked = ({ category, gridUnlock, changeInClickedLength }) => {
 
     const totalImages = category.images.length;
     const [clickedLength, setClickedLength] = useState(0);
+    const [showForm, setShowForm] = useState(false);
+    const openForm = () => setShowForm(true);
+    const closeForm = () => setShowForm(false);
 
     useEffect(() => {
         changeInClickedLength(clickedLength);
-    }, [clickedLength,changeInClickedLength]);
+    }, [clickedLength, changeInClickedLength]);
 
 
     return (
@@ -124,14 +130,14 @@ const PhotoGridUnlocked = ({ category, gridUnlock, changeInClickedLength }) => {
 
         gridUnlock ?
 
-        // Photo Grid Unlocked Loigc
+            // Photo Grid Unlocked Loigc
 
             <div className="mb-8 md:mb-16 px-4 md:px-8 py-4 md:py-6 bg-white rounded-3xl shadow-sm">
                 <div className="flex flex-col md:flex-row md:items-center justify-between mb-6 md:mb-8 gap-4">
                     <h1 className="text-4xl md:text-7xl font-light tracking-wider">{category.categoryTitle}</h1>
 
                     <div className="flex flex-wrap items-center gap-2 md:gap-3">
-                        <button className="flex items-center gap-2 bg-gray-100 text-gray-700 hover:bg-gray-200 px-3 md:px-4 py-2 rounded-full transition-colors">
+                        <button  onClick={openForm} className="flex items-center gap-2 bg-gray-100 text-gray-700 hover:bg-gray-200 px-3 md:px-4 py-2 rounded-full transition-colors">
                             <svg className="w-4 md:w-5 h-4 md:h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor">
                                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
                             </svg>
@@ -161,13 +167,28 @@ const PhotoGridUnlocked = ({ category, gridUnlock, changeInClickedLength }) => {
                         })
                     }
                 </div>
+{showForm && (
+        <div className="fixed inset-0 z-50 bg-black bg-opacity-50 flex justify-center items-center">
+          <div className="relative bg-white rounded-lg shadow-lg p-6 max-w-md w-full">
+            {/* Close Button */}
+            <button
+              onClick={closeForm}
+              className="absolute top-2 right-3 text-gray-600 hover:text-black text-xl"
+            >
+              &times;
+            </button>
 
+            {/* Inject AddAccessForm */}
+            <AddAccessForm onClose={closeForm} />
+          </div>
+        </div>
+      )}
                 <div className="mt-4 md:mt-6 text-right text-xs md:text-sm text-gray-600">
                     Selected: {clickedLength}/{totalImages}
                 </div>
             </div>
 
-            : 
+            :
             // Photo Grid Locked Component
             <div className="mb-8 md:mb-16 px-4 md:px-8 py-4 md:py-6 bg-white rounded-3xl shadow-sm">
                 <div className="flex flex-col md:flex-row md:items-center justify-between mb-6 md:mb-8 gap-4">

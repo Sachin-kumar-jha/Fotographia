@@ -41,27 +41,27 @@ const Countdown = ({ baseDate, months, days, hours, minutes }) => {
   }, [targetDate]);
 
   return (
-    <div className="p-6 max-w-md mx-auto mt-10 bg-white rounded-2xl shadow-md text-center">
-      <h2 className="text-2xl font-semibold mb-4 text-gray-700">Wedding Countdown</h2>
+    <div className=" max-w-md mx-auto mt-10 bg-blue-700 text-white rounded-2xl shadow-md text-center">
+      <h2 className="text-2xl font-semibold  text-white">Wedding Countdown</h2>
       {isOver ? (
         <p className="text-red-500 font-medium">🎉 Countdown is over!</p>
       ) : (
-        <div className="flex justify-center space-x-4 text-xl font-semibold text-gray-800">
+        <div className="flex justify-center space-x-4 text-xl text-white font-semibold">
           <div className="flex flex-col items-center">
             <span className="text-3xl">{timeLeft.days}</span>
-            <span className="text-sm text-gray-500">Days</span>
+            <span className="text-sm text-white">Days</span>
           </div>
           <div className="flex flex-col items-center">
             <span className="text-3xl">{timeLeft.hours}</span>
-            <span className="text-sm text-gray-500">Hours</span>
+            <span className="text-sm text-white">Hours</span>
           </div>
           <div className="flex flex-col items-center">
             <span className="text-3xl">{timeLeft.minutes}</span>
-            <span className="text-sm text-gray-500">Minutes</span>
+            <span className="text-sm text-white">Minutes</span>
           </div>
           <div className="flex flex-col items-center">
             <span className="text-3xl">{timeLeft.seconds}</span>
-            <span className="text-sm text-gray-500">Seconds</span>
+            <span className="text-sm text-white">Seconds</span>
           </div>
         </div>
       )}
@@ -78,7 +78,7 @@ const Countdown2 = ()=>{
   const minutes =60;
 
   return (
-    <div className="bg-gray-100 min-h-screen flex items-center justify-center">
+    <div className=" relative flex items-center justify-center">
       <Countdown
         baseDate={baseDate}
         months={months}
