@@ -1,6 +1,6 @@
 import Header from "../components/Header"
 import { useEffect, useState, useMemo } from "react"
-import axios from "axios"
+import api from "../api/axios.js"
 import AddAccessForm from "./AddAccesForm"
 const ClientMain = () => {
 
@@ -16,11 +16,29 @@ const ClientMain = () => {
     */
 
     //////////////////////////////////////////////////////////////////
-    //  const weddingId = "6873f83493cb218de9046999"; // fix this
+    // const weddingId = "6884b6791033db2946746dfa"; // fix this
     ///////////////////////////////////////////////////////////////////
-
-
     // for now keeping this as the response structure will fix this afterwards.
+
+    const [weddingId,] = useState(() => {
+
+        try {
+
+            const userString = localStorage.getItem('user');
+            if (!userString) {
+                return "some defult value."
+            }
+            const userObject = JSON.parse(userString);
+            if (userObject.user && userObject.user.weddingId) {
+                return userObject.user.weddingId;
+            } else {
+                return "Default Value";
+            }
+        } catch (error) {
+            console.error("Local Storage Error : ", error);
+            return "Default Value";
+        }
+    })
 
     const [categoryDetails, setCategoryDetails] = useState({
         "success": true,
@@ -45,9 +63,9 @@ const ClientMain = () => {
 
     const [unlockedIndexes, setUnlockedIndexes] = useState([0]);
     const [clickedImagesTracker, setClickedImagesTracker] = useState(Array(categoryDetails.data.length).fill(0));
-    const data = JSON.parse(localStorage.getItem("user"));
+    // const data = JSON.parse(localStorage.getItem("user"));
 
-    const weddingId = data?.user?.weddingId;
+    // const weddingId = data?.user?.weddingId;
 
     useEffect(() => {
         let newUnlocked = [0];
@@ -61,12 +79,15 @@ const ClientMain = () => {
         setUnlockedIndexes(newUnlocked);
     }, [clickedImagesTracker, categoryDetails.data]);
 
+    useEffect(() => {
+        setClickedImagesTracker(Array(categoryDetails.data.length).fill(0));
+    }, [categoryDetails.data.length]);
 
 
     useEffect(() => {
 
         async function FetchImages() {
-            const response = await axios.post('http://localhost:8080/api/v1/user/fetch_presigned_urls', {
+            const response = await api.post('/api/v1/user/fetch_presigned_urls', {
                 weddingId
             })
             console.log(response.data);
@@ -74,7 +95,7 @@ const ClientMain = () => {
         }
 
         FetchImages();
-    }, [weddingId]);
+    }, [weddingId])
 
     // Memoize the callback per index so its reference is stable for each PhotoGridUnlocked
     const handleClickedLengthChangeMap = useMemo(() => {
@@ -317,16 +338,6 @@ const PhotoItemLocked = ({ imageURL, imageName }) => {
 }
 
 // didn't get what is the use for this, this was in oves's frontend logic so kept it here use it accordingly.
-const FloatingActionButton = () => {
-    return (
-        <div className="fixed bottom-4 md:bottom-8 left-1/2 transform -translate-x-1/2">
-            <button className="bg-green-500 text-white rounded-full p-3 md:p-4 shadow-2xl hover:bg-green-600 transition-all duration-300 hover:scale-110">
-                <svg className="w-6 md:w-8 h-6 md:h-8" fill="currentColor" viewBox="0 0 20 20">
-                    <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
-                </svg>
-            </button>
-        </div>
-    )
-}
+
 
 export default ClientMain;
